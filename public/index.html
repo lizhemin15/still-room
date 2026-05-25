@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>静室</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Layer 1: The Surface -->
+  <div id="surface" class="layer active">
+    <div class="greeting" id="greeting"></div>
+    <div class="breath-circle" id="breathCircle">
+      <div class="breath-inner"></div>
+    </div>
+    <div class="enter-hint" id="enterHint">轻触，进入</div>
+  </div>
+
+  <!-- Layer 2: Dialogue -->
+  <div id="dialogue" class="layer">
+    <div class="dialogue-flow" id="dialogueFlow"></div>
+    <div class="dialogue-input-wrap">
+      <input type="text" id="dialogueInput" class="dialogue-input" placeholder="说点什么…" autocomplete="off">
+    </div>
+    <div class="silence-option" id="silenceOption">不说了，坐一会儿</div>
+  </div>
+
+  <!-- Layer 3: Silence -->
+  <div id="silence" class="layer">
+    <div class="silence-timer-select" id="timerSelect">
+      <div class="timer-option" data-minutes="5">5 分钟</div>
+      <div class="timer-option" data-minutes="10">10 分钟</div>
+      <div class="timer-option" data-minutes="15">15 分钟</div>
+      <div class="timer-option timer-none" data-minutes="0">不定时</div>
+    </div>
+    <div class="silence-space" id="silenceSpace">
+      <canvas id="rippleCanvas"></canvas>
+      <div class="breath-circle breath-circle-silence" id="silenceBreath">
+        <div class="breath-inner"></div>
+      </div>
+    </div>
+    <div class="silence-timer" id="silenceTimer"></div>
+    <div class="silence-exit" id="silenceExit">好了。去吧。</div>
+    <div class="sound-toggle" id="soundToggle" title="环境音">
+      <span class="sound-icon">🔇</span>
+    </div>
+  </div>
+
+  <!-- Ambient Sound -->
+  <audio id="ambientSound" loop preload="none">
+    <source src="audio/rain.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "still-room",
+  "version": "1.0.0",
+  "description": "A space to slow down. Not a product — a door you open and exhale.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "license": "MIT"
+}

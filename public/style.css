@@ -1,0 +1,404 @@
+/* ========================================
+   Still Room — Visual Language
+   Deep ink. Warm gray. Slow.
+   ======================================== */
+
+:root {
+  --ink: #0a0a0c;
+  --ink-light: #141418;
+  --warm-gray: #b8a99a;
+  --warm-gray-dim: #6b5f54;
+  --warm-glow: #c4956a;
+  --warm-glow-soft: rgba(196, 149, 106, 0.15);
+  --transition-slow: 1200ms;
+  --transition-medium: 800ms;
+  --font-serif: 'Noto Serif SC', 'Georgia', 'Times New Roman', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--warm-gray);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   Layers
+   ======================================== */
+
+.layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-slow) ease;
+  z-index: 1;
+}
+
+.layer.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* ========================================
+   Layer 1: The Surface
+   ======================================== */
+
+#surface {
+  cursor: pointer;
+  background: var(--ink);
+}
+
+.greeting {
+  font-size: 2rem;
+  font-weight: 200;
+  letter-spacing: 0.3em;
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+  color: var(--warm-gray);
+  user-select: none;
+}
+
+.greeting.visible {
+  opacity: 1;
+}
+
+.breath-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+  position: relative;
+}
+
+.breath-circle.visible {
+  opacity: 1;
+}
+
+.breath-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--warm-glow-soft) 0%, transparent 70%);
+  animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.enter-hint {
+  position: absolute;
+  bottom: 60px;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--warm-gray-dim);
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+}
+
+.enter-hint.visible {
+  opacity: 1;
+  animation: gentle-pulse 4s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* ========================================
+   Layer 2: Dialogue
+   ======================================== */
+
+#dialogue {
+  background: var(--ink);
+  cursor: default;
+  padding: 0;
+}
+
+.dialogue-flow {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  padding: 80px 24px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scrollbar-width: none;
+}
+
+.dialogue-flow::-webkit-scrollbar {
+  display: none;
+}
+
+.dialogue-message {
+  max-width: 80%;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--transition-medium) ease, transform var(--transition-medium) ease;
+  line-height: 1.9;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.dialogue-message.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dialogue-message.user {
+  color: var(--warm-gray-dim);
+  align-self: flex-end;
+  text-align: right;
+  font-size: 0.95rem;
+}
+
+.dialogue-message.bot {
+  color: var(--warm-gray);
+  align-self: flex-start;
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.dialogue-message.bot .typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--warm-glow);
+  margin-left: 2px;
+  animation: blink-cursor 1.2s ease-in-out infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.8; }
+}
+
+.dialogue-input-wrap {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 24px 40px;
+}
+
+.dialogue-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--warm-gray-dim);
+  color: var(--warm-gray);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  padding: 12px 0;
+  outline: none;
+  transition: border-color var(--transition-medium) ease;
+}
+
+.dialogue-input::placeholder {
+  color: var(--warm-gray-dim);
+  opacity: 0.5;
+}
+
+.dialogue-input:focus {
+  border-color: var(--warm-glow);
+}
+
+.silence-option {
+  padding-bottom: 60px;
+  font-size: 0.85rem;
+  font-weight: 200;
+  letter-spacing: 0.15em;
+  color: var(--warm-gray-dim);
+  cursor: pointer;
+  transition: color var(--transition-medium) ease;
+  user-select: none;
+}
+
+.silence-option:hover {
+  color: var(--warm-glow);
+}
+
+/* ========================================
+   Layer 3: Silence
+   ======================================== */
+
+#silence {
+  background: var(--ink);
+  cursor: default;
+}
+
+.silence-timer-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 10;
+  transition: opacity var(--transition-slow) ease;
+}
+
+.silence-timer-select.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.timer-option {
+  font-size: 1rem;
+  font-weight: 200;
+  letter-spacing: 0.2em;
+  color: var(--warm-gray-dim);
+  cursor: pointer;
+  padding: 8px 24px;
+  transition: color var(--transition-medium) ease;
+  user-select: none;
+}
+
+.timer-option:hover {
+  color: var(--warm-glow);
+}
+
+.timer-none {
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.silence-space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+}
+
+.silence-space.visible {
+  opacity: 1;
+}
+
+#rippleCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.breath-circle-silence {
+  margin-top: 0;
+  z-index: 2;
+}
+
+.silence-timer {
+  position: absolute;
+  bottom: 80px;
+  font-size: 0.85rem;
+  font-weight: 200;
+  letter-spacing: 0.3em;
+  color: var(--warm-gray-dim);
+  opacity: 0;
+  transition: opacity var(--transition-medium) ease;
+}
+
+.silence-timer.visible {
+  opacity: 0.6;
+}
+
+.silence-exit {
+  position: absolute;
+  bottom: 80px;
+  font-size: 1.2rem;
+  font-weight: 200;
+  letter-spacing: 0.3em;
+  color: var(--warm-gray);
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+  user-select: none;
+}
+
+.silence-exit.visible {
+  opacity: 1;
+}
+
+.sound-toggle {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity var(--transition-medium) ease;
+  user-select: none;
+  z-index: 10;
+}
+
+.sound-toggle:hover {
+  opacity: 0.7;
+}
+
+.sound-toggle.active {
+  opacity: 0.8;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 480px) {
+  .greeting {
+    font-size: 1.5rem;
+  }
+  
+  .breath-circle {
+    width: 90px;
+    height: 90px;
+    margin-top: 40px;
+  }
+  
+  .dialogue-flow {
+    padding: 60px 16px 16px;
+  }
+  
+  .dialogue-message {
+    max-width: 90%;
+  }
+}
